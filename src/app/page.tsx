@@ -135,6 +135,7 @@ funded, active });
           address={address} 
           onConnect={handleConnect}
           stats={stats}
+          signer={signer}
         />
 
         {/* Tabs */}
