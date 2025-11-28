@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
+import SwapModal from './SwapModal';
 
 interface HeaderProps {
   address: string | null;
@@ -17,6 +18,7 @@ export default function Header({ address, onConnect, stats }: HeaderProps) {
   const [celo, setCelo] = useState('0');
   const [cusd, setCusd] = useState('0');
   const [ceur, setCeur] = useState('0');
+  const [showSwap, setShowSwap] = useState(false);
 
   const short = address ? address.slice(0, 6) + '...' + address.slice(-4) : null;
 
@@ -51,9 +53,14 @@ export default function Header({ address, onConnect, stats }: HeaderProps) {
             <p className="text-white/70">Gamified Micro-Lending on Celo</p>
           </div>
         </div>
-        <button onClick={onConnect} className={`px-6 py-3 rounded-xl font-semibold transition-all ${address ? 'glass text-white' : 'btn-primary'}`}>
-          {short || 'Connect Wallet'}
-        </button>
+        <div className="flex items-center gap-3">
+          {address && (
+            <button onClick={() => setShowSwap(true)} className="px-4 py-2 rounded-xl glass text-white hover:bg-white/20">Swap</button>
+          )}
+          <button onClick={onConnect} className={`px-6 py-3 rounded-xl font-semibold transition-all ${address ? 'glass text-white' : 'btn-primary'}`}>
+            {short || 'Connect Wallet'}
+          </button>
+        </div>
       </div>
       {address && (
         <div className="grid grid-cols-3 gap-4 mb-6">
@@ -89,6 +96,9 @@ export default function Header({ address, onConnect, stats }: HeaderProps) {
           <p className="text-3xl font-bold text-yellow-300">$1</p>
         </div>
       </div>
+      {showSwap && address && (
+        <SwapModal address={address} onClose={() => setShowSwap(false)} onSwapComplete={fetchBalances} />
+      )}
     </header>
   );
 }
