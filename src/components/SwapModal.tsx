@@ -13,7 +13,9 @@ interface SwapModalProps {
 
 const CUSD = '0x765DE816845861e75A25fCA122bb6898B8B1282a';
 const CEUR = '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73';
-const CELO = '0x471EcE3750Da237f93B8E339c536989b8978a438';
+const CELO = '0x471EcE3750Da237f93B8E339c536989b8978a438'; // Wrapped CELO
+
+// Note: Using wrapped CELO for swaps as Ubeswap requires ERC20 tokens
 
 export default function SwapModal({ address, onClose, onSwapComplete }: SwapModalProps) {
   const [fromToken, setFromToken] = useState('CELO');
@@ -168,6 +170,16 @@ export default function SwapModal({ address, onClose, onSwapComplete }: SwapModa
       const toAddress = getTokenAddress(toToken);
       const amountIn = ethers.parseEther(amount);
       
+      // Verify user has sufficient token balance
+      const tokenContract = getTokenContract(fromAddress, signer);
+      const balance = await tokenContract.balanceOf(address);
+      
+      if (balance < amountIn) {
+        setError(`Insufficient ${fromToken} balance. You have ${ethers.formatEther(balance)} but trying to swap ${amount}`);
+        setLoading(false);
+        return;
+      }
+      
       // Get actual amounts from router to ensure path exists
       const router = getUbeswapRouter(provider);
       const path = [fromAddress, toAddress];
@@ -185,13 +197,22 @@ export default function SwapModal({ address, onClose, onSwapComplete }: SwapModa
       const minAmountOut = (amounts[1] * BigInt(97)) / BigInt(100);
       
       // Check and approve token spending for the router
-      const tokenContract = getTokenContract(fromAddress, signer);
-      
       try {
         const allowance = await tokenContract.allowance(address, UBESWAP_ROUTER);
         
+        console.log('Current allowance:', ethers.formatEther(allowance));
+        console.log('Amount needed:', ethers.formatEther(amountIn));
+        
         if (allowance < amountIn) {
           setError('Step 1/2: Approving token...');
+          
+          // First reset approval to 0 if needed (some tokens require this)
+          if (allowance > 0) {
+            const resetTx = await tokenContract.approve(UBESWAP_ROUTER, 0);
+            await resetTx.wait();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+          
           const approveTx = await tokenContract.approve(UBESWAP_ROUTER, ethers.MaxUint256);
           const approveReceipt = await approveTx.wait();
           
@@ -199,8 +220,19 @@ export default function SwapModal({ address, onClose, onSwapComplete }: SwapModa
             throw new Error('Token approval failed');
           }
           
-          // Wait a bit for the approval to be confirmed on chain
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          console.log('Approval successful, tx:', approveReceipt.hash);
+          
+          // Wait for approval to be confirmed on chain
+          await new Promise(resolve => setTimeout(resolve, 3000));
+          
+          // Verify approval went through
+          const newAllowance = await tokenContract.allowance(address, UBESWAP_ROUTER);
+          console.log('New allowance after approval:', ethers.formatEther(newAllowance));
+          
+          if (newAllowance < amountIn) {
+            throw new Error('Approval did not register correctly. Please try again.');
+          }
+          
           setError('');
         }
       } catch (approvalError: any) {
