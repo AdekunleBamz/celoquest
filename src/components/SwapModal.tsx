@@ -24,10 +24,18 @@ export default function SwapModal({ address, onClose, onSwapComplete }: SwapModa
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [txHash, setTxHash] = useState('');
+  const [fromBalance, setFromBalance] = useState('0.00');
+  const [toBalance, setToBalance] = useState('0.00');
+  const [loadingBalances, setLoadingBalances] = useState(false);
 
   useEffect(() => {
     fetchPrice();
+    fetchBalances();
   }, []);
+
+  useEffect(() => {
+    fetchBalances();
+  }, [fromToken, toToken, address]);
 
   useEffect(() => {
     calcEstimate();
@@ -41,6 +49,37 @@ export default function SwapModal({ address, onClose, onSwapComplete }: SwapModa
     } catch (e) {
       setCeloPrice(0.5);
     }
+  }
+
+  async function fetchBalances() {
+    if (!address) return;
+    setLoadingBalances(true);
+    try {
+      const provider = getProvider();
+      const fromAddress = getTokenAddress(fromToken);
+      const toAddress = getTokenAddress(toToken);
+      
+      const fromContract = getTokenContract(fromAddress, provider);
+      const toContract = getTokenContract(toAddress, provider);
+      
+      const [fromBal, toBal] = await Promise.all([
+        fromContract.balanceOf(address),
+        toContract.balanceOf(address)
+      ]);
+      
+      setFromBalance(parseFloat(ethers.formatEther(fromBal)).toFixed(4));
+      setToBalance(parseFloat(ethers.formatEther(toBal)).toFixed(4));
+    } catch (e) {
+      console.error('Error fetching balances:', e);
+      setFromBalance('0.00');
+      setToBalance('0.00');
+    } finally {
+      setLoadingBalances(false);
+    }
+  }
+
+  function setMaxAmount() {
+    setAmount(fromBalance);
   }
 
   async function calcEstimate() {
@@ -154,7 +193,10 @@ export default function SwapModal({ address, onClose, onSwapComplete }: SwapModa
       setTxHash(tx.hash);
       await tx.wait();
 
+      // Refresh balances after successful swap
+      await fetchBalances();
       onSwapComplete();
+      
       setTimeout(() => {
         onClose();
       }, 2000);
@@ -194,6 +236,18 @@ export default function SwapModal({ address, onClose, onSwapComplete }: SwapModa
             </select>
           </div>
           <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" className="w-full bg-transparent text-3xl text-white outline-none" />
+          <div className="flex justify-between items-center mt-2">
+            <span className="text-white/40 text-sm">
+              Balance: {loadingBalances ? '...' : fromBalance}
+            </span>
+            <button 
+              onClick={setMaxAmount}
+              disabled={loadingBalances || parseFloat(fromBalance) === 0}
+              className="text-blue-400 text-sm font-semibold hover:text-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              MAX
+            </button>
+          </div>
         </div>
 
         <div className="flex justify-center my-2">
@@ -212,6 +266,11 @@ export default function SwapModal({ address, onClose, onSwapComplete }: SwapModa
             </select>
           </div>
           <p className="text-3xl text-white">{estimatedOutput}</p>
+          <div className="mt-2">
+            <span className="text-white/40 text-sm">
+              Balance: {loadingBalances ? '...' : toBalance}
+            </span>
+          </div>
         </div>
 
         <div className="bg-white/5 rounded-xl p-3 mb-4">
