@@ -4,6 +4,9 @@ export const CUSD_ADDRESS = process.env.NEXT_PUBLIC_CUSD_ADDRESS as string;
 export const CHAIN_ID = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '42220');
 export const RPC_URL = process.env.NEXT_PUBLIC_RPC_URL as string;
 
+// Ubeswap Router V2 on Celo
+export const UBESWAP_ROUTER = '0xE3D8bd6Aed4F159bc8000a9cD47CffDb95F96121';
+
 export const MAIN_ABI = [
   "function owner() view returns (address)",
   "function borrowerCount() view returns (uint256)",
@@ -53,4 +56,11 @@ export const ERC20_ABI = [
   "function approve(address spender, uint256 amount) returns (bool)",
   "function allowance(address owner, address spender) view returns (uint256)",
   "function balanceOf(address account) view returns (uint256)"
+];
+
+export const UBESWAP_ROUTER_ABI = [
+  "function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)",
+  "function swapTokensForExactTokens(uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)",
+  "function getAmountsOut(uint amountIn, address[] calldata path) view returns (uint[] memory amounts)",
+  "function WETH() external pure returns (address)"
 ];

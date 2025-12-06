@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { MAIN_CONTRACT, APP_CONTRACT, CUSD_ADDRESS, MAIN_ABI, APP_ABI, ERC20_ABI, RPC_URL } from 
+import { MAIN_CONTRACT, APP_CONTRACT, CUSD_ADDRESS, MAIN_ABI, APP_ABI, ERC20_ABI, RPC_URL, UBESWAP_ROUTER, UBESWAP_ROUTER_ABI } from 
 './contracts';
 
 export { MAIN_CONTRACT, CUSD_ADDRESS };
@@ -70,4 +70,14 @@ export function formatCUSD(amount: bigint): string {
 
 export function parseCUSD(amount: string): bigint {
   return ethers.parseUnits(amount, 18);
+}
+
+export function getUbeswapRouter(signerOrProvider?: ethers.Signer | ethers.Provider) {
+  const provider = signerOrProvider || getReadOnlyProvider();
+  return new ethers.Contract(UBESWAP_ROUTER, UBESWAP_ROUTER_ABI, provider);
+}
+
+export function getTokenContract(tokenAddress: string, signerOrProvider?: ethers.Signer | ethers.Provider) {
+  const provider = signerOrProvider || getReadOnlyProvider();
+  return new ethers.Contract(tokenAddress, ERC20_ABI, provider);
 }
