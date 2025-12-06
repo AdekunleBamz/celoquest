@@ -149,6 +149,12 @@ export default function SwapModal({ address, onClose, onSwapComplete }: SwapModa
       setError('Cannot swap same token');
       return;
     }
+    
+    // Check if user has sufficient balance
+    if (parseFloat(amount) > parseFloat(fromBalance)) {
+      setError('Insufficient balance');
+      return;
+    }
 
     setLoading(true);
     setError('');
@@ -162,26 +168,52 @@ export default function SwapModal({ address, onClose, onSwapComplete }: SwapModa
       const toAddress = getTokenAddress(toToken);
       const amountIn = ethers.parseEther(amount);
       
+      // Get actual amounts from router to ensure path exists
+      const router = getUbeswapRouter(provider);
+      const path = [fromAddress, toAddress];
+      
+      let amounts;
+      try {
+        amounts = await router.getAmountsOut(amountIn, path);
+      } catch (e) {
+        setError('No liquidity pool available for this pair');
+        setLoading(false);
+        return;
+      }
+      
       // Calculate minimum output with 3% slippage tolerance
-      const minAmountOut = ethers.parseEther((parseFloat(estimatedOutput) * 0.97).toString());
+      const minAmountOut = (amounts[1] * BigInt(97)) / BigInt(100);
       
-      // Approve token spending for the router
+      // Check and approve token spending for the router
       const tokenContract = getTokenContract(fromAddress, signer);
-      const allowance = await tokenContract.allowance(address, UBESWAP_ROUTER);
       
-      if (allowance < amountIn) {
-        setError('Approving token...');
-        const approveTx = await tokenContract.approve(UBESWAP_ROUTER, ethers.MaxUint256);
-        await approveTx.wait();
-        setError('');
+      try {
+        const allowance = await tokenContract.allowance(address, UBESWAP_ROUTER);
+        
+        if (allowance < amountIn) {
+          setError('Step 1/2: Approving token...');
+          const approveTx = await tokenContract.approve(UBESWAP_ROUTER, ethers.MaxUint256);
+          const approveReceipt = await approveTx.wait();
+          
+          if (!approveReceipt || approveReceipt.status === 0) {
+            throw new Error('Token approval failed');
+          }
+          
+          // Wait a bit for the approval to be confirmed on chain
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          setError('');
+        }
+      } catch (approvalError: any) {
+        console.error('Approval error:', approvalError);
+        throw new Error(`Approval failed: ${approvalError.message}`);
       }
 
       // Execute swap
-      const router = getUbeswapRouter(signer);
-      const path = [fromAddress, toAddress];
+      setError('Step 2/2: Executing swap...');
+      const routerWithSigner = getUbeswapRouter(signer);
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 minutes
 
-      const tx = await router.swapExactTokensForTokens(
+      const tx = await routerWithSigner.swapExactTokensForTokens(
         amountIn,
         minAmountOut,
         path,
@@ -190,6 +222,7 @@ export default function SwapModal({ address, onClose, onSwapComplete }: SwapModa
         { gasLimit: 500000 } // Set explicit gas limit
       );
 
+      setError('');
       setTxHash(tx.hash);
       await tx.wait();
 
@@ -280,9 +313,15 @@ export default function SwapModal({ address, onClose, onSwapComplete }: SwapModa
           </div>
         </div>
 
-        {error && (
+        {error && !error.includes('Step') && (
           <div className="bg-red-500/20 border border-red-500 rounded-xl p-3 mb-4">
             <p className="text-red-200 text-sm">{error}</p>
+          </div>
+        )}
+
+        {error && error.includes('Step') && (
+          <div className="bg-blue-500/20 border border-blue-500 rounded-xl p-3 mb-4">
+            <p className="text-blue-200 text-sm">{error}</p>
           </div>
         )}
 
