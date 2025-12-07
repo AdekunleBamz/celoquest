@@ -1,0 +1,24 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <circle cx="32" cy="32" r="32" fill="url(#gradient)"/>
+  
+  <!-- Coin/Dollar symbol -->
+  <path d="M32 12C20.954 12 12 20.954 12 32C12 43.046 20.954 52 32 52C43.046 52 52 43.046 52 32C52 20.954 43.046 12 32 12Z" fill="white" fill-opacity="0.2"/>
+  
+  <!-- Dollar sign -->
+  <path d="M32 18V22M32 42V46M28 24H34C35.6569 24 37 25.3431 37 27C37 28.6569 35.6569 30 34 30H28V24ZM28 30H36C37.6569 30 39 31.3431 39 33C39 34.6569 37.6569 36 36 36H28V30ZM28 36H28V40C28 41.1046 28.8954 42 30 42H36" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Sparkle effect -->
+  <circle cx="44" cy="20" r="2" fill="#FCFF52" opacity="0.8"/>
+  <circle cx="48" cy="26" r="1.5" fill="#FCFF52" opacity="0.6"/>
+  <circle cx="20" cy="44" r="2" fill="#FCFF52" opacity="0.8"/>
+  
+  <!-- Gradient definition -->
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#35D07F"/>
+      <stop offset="50%" stop-color="#FBCC5C"/>
+      <stop offset="100%" stop-color="#35D07F"/>
+    </linearGradient>
+  </defs>
+</svg>
