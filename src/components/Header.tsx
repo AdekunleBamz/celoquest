@@ -47,7 +47,9 @@ export default function Header({ address, onConnect, stats }: HeaderProps) {
     <header className="mb-10">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 bg-gradient-to-br from-yellow-300 to-orange-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg">T</div>
+          <div className="w-16 h-16 bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+            <span className="text-3xl font-black text-white" style={{ letterSpacing: '-2px' }}>CQ</span>
+          </div>
           <div>
             <h1 className="text-4xl font-extrabold text-white">CeloQuest</h1>
             <p className="text-white/70">Gamified Micro-Lending on Celo</p>
