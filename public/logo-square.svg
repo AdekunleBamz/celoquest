@@ -1,0 +1,29 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with yellow gradient and rounded corners -->
+  <rect width="512" height="512" rx="102.4" fill="url(#yellowGradient)"/>
+  
+  <!-- Outer ring -->
+  <circle cx="256" cy="256" r="200" stroke="white" stroke-width="12" opacity="0.3"/>
+  
+  <!-- C letter -->
+  <path d="M208 176C166.645 176 133 209.645 133 251C133 292.355 166.645 326 208 326C224 326 238.8 320.8 250.4 312.4" 
+        stroke="white" stroke-width="32" stroke-linecap="round"/>
+  
+  <!-- Q letter with tail -->
+  <circle cx="320" cy="251" r="64" stroke="white" stroke-width="32"/>
+  <path d="M356 287L382 313" stroke="white" stroke-width="32" stroke-linecap="round"/>
+  
+  <!-- Sparkle accents -->
+  <path d="M90 140L96 152L108 158L96 164L90 176L84 164L72 158L84 152L90 140Z" fill="white" opacity="0.9"/>
+  <path d="M405 100L411 110L421 116L411 122L405 132L399 122L389 116L399 110L405 100Z" fill="white" opacity="0.8"/>
+  <path d="M425 370L431 380L441 386L431 392L425 402L419 392L409 386L419 380L425 370Z" fill="#35D07F" opacity="0.7"/>
+  
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="yellowGradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="50%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+</svg>
