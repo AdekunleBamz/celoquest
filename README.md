@@ -283,7 +283,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Website**: [celoquest.vercel.app](https://celoquest.vercel.app)
 - **GitHub**: [@AdekunleBamz](https://github.com/AdekunleBamz)
-- **Twitter**: [Add your Twitter]
+- **Twitter**: [@HRH_Mckay]
 - **Email**: bamzzstudio@gmail.com
 
 ---
