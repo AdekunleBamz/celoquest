@@ -14,19 +14,20 @@ export default function AppleIcon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(135deg, #35D07F 0%, #FBCC5C 50%, #35D07F 100%)',
+          background: 'linear-gradient(135deg, #FCD34D 0%, #FBBF24 50%, #F59E0B 100%)',
           borderRadius: '20%',
         }}
       >
         <div
           style={{
-            fontSize: 90,
-            fontWeight: 'bold',
+            fontSize: 85,
+            fontWeight: 900,
             color: 'white',
             display: 'flex',
+            letterSpacing: '-4px',
           }}
         >
-          $
+          CQ
         </div>
       </div>
     ),

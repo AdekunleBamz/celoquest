@@ -1,24 +1,29 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background circle with gradient -->
-  <circle cx="32" cy="32" r="32" fill="url(#gradient)"/>
+  <!-- Background with yellow gradient -->
+  <circle cx="32" cy="32" r="32" fill="url(#yellowGradient)"/>
   
-  <!-- Coin/Dollar symbol -->
-  <path d="M32 12C20.954 12 12 20.954 12 32C12 43.046 20.954 52 32 52C43.046 52 52 43.046 52 32C52 20.954 43.046 12 32 12Z" fill="white" fill-opacity="0.2"/>
+  <!-- Outer ring -->
+  <circle cx="32" cy="32" r="28" stroke="white" stroke-width="1.5" opacity="0.3"/>
   
-  <!-- Dollar sign -->
-  <path d="M32 18V22M32 42V46M28 24H34C35.6569 24 37 25.3431 37 27C37 28.6569 35.6569 30 34 30H28V24ZM28 30H36C37.6569 30 39 31.3431 39 33C39 34.6569 37.6569 36 36 36H28V30ZM28 36H28V40C28 41.1046 28.8954 42 30 42H36" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- C letter -->
+  <path d="M26 20C19.3726 20 14 25.3726 14 32C14 38.6274 19.3726 44 26 44C28.5 44 30.8 43.2 32.7 41.9" 
+        stroke="white" stroke-width="4.5" stroke-linecap="round"/>
   
-  <!-- Sparkle effect -->
-  <circle cx="44" cy="20" r="2" fill="#FCFF52" opacity="0.8"/>
-  <circle cx="48" cy="26" r="1.5" fill="#FCFF52" opacity="0.6"/>
-  <circle cx="20" cy="44" r="2" fill="#FCFF52" opacity="0.8"/>
+  <!-- Q letter with tail -->
+  <circle cx="42" cy="32" r="9" stroke="white" stroke-width="4.5"/>
+  <path d="M47 37L51 41" stroke="white" stroke-width="4.5" stroke-linecap="round"/>
   
-  <!-- Gradient definition -->
+  <!-- Sparkle accents -->
+  <path d="M10 15L11 17L13 18L11 19L10 21L9 19L7 18L9 17L10 15Z" fill="white" opacity="0.9"/>
+  <path d="M52 10L53 11.5L54.5 12.5L53 13.5L52 15L51 13.5L49.5 12.5L51 11.5L52 10Z" fill="white" opacity="0.8"/>
+  <path d="M55 48L56 49.5L57.5 50.5L56 51.5L55 53L54 51.5L52.5 50.5L54 49.5L55 48Z" fill="#35D07F" opacity="0.7"/>
+  
+  <!-- Gradient definitions -->
   <defs>
-    <linearGradient id="gradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#35D07F"/>
-      <stop offset="50%" stop-color="#FBCC5C"/>
-      <stop offset="100%" stop-color="#35D07F"/>
+    <linearGradient id="yellowGradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="50%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
     </linearGradient>
   </defs>
 </svg>

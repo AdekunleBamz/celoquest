@@ -14,19 +14,20 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(135deg, #35D07F 0%, #FBCC5C 50%, #35D07F 100%)',
+          background: 'linear-gradient(135deg, #FCD34D 0%, #FBBF24 50%, #F59E0B 100%)',
           borderRadius: '50%',
         }}
       >
         <div
           style={{
-            fontSize: 20,
-            fontWeight: 'bold',
+            fontSize: 18,
+            fontWeight: 900,
             color: 'white',
             display: 'flex',
+            letterSpacing: '-1px',
           }}
         >
-          $
+          CQ
         </div>
       </div>
     ),
