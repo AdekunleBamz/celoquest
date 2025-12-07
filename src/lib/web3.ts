@@ -37,12 +37,16 @@ export async function connectWallet(forceRequest: boolean = true) {
   
   const provider = new ethers.BrowserProvider(window.ethereum);
   
-  // Always request accounts to force user approval
+  // Force wallet popup by requesting permissions
   if (forceRequest) {
-    await provider.send('eth_requestAccounts', []);
-  } else {
-    await provider.send('eth_requestAccounts', []);
+    await window.ethereum.request({
+      method: 'wallet_requestPermissions',
+      params: [{ eth_accounts: {} }],
+    });
   }
+  
+  // Request accounts after permission
+  await provider.send('eth_requestAccounts', []);
   
   const network = await provider.getNetwork();
   if (Number(network.chainId) !== 42220) {
