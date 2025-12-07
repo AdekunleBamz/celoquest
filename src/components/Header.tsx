@@ -7,6 +7,7 @@ import SwapModal from './SwapModal';
 interface HeaderProps {
   address: string | null;
   onConnect: () => void;
+  onDisconnect: () => void;
   stats: { totalFunded: string; borrowerCount: number };
 }
 
@@ -14,7 +15,7 @@ const CUSD = '0x765DE816845861e75A25fCA122bb6898B8B1282a';
 const CEUR = '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73';
 const ABI = ['function balanceOf(address) view returns (uint256)'];
 
-export default function Header({ address, onConnect, stats }: HeaderProps) {
+export default function Header({ address, onConnect, onDisconnect, stats }: HeaderProps) {
   const [celo, setCelo] = useState('0');
   const [cusd, setCusd] = useState('0');
   const [ceur, setCeur] = useState('0');
@@ -57,11 +58,21 @@ export default function Header({ address, onConnect, stats }: HeaderProps) {
         </div>
         <div className="flex items-center gap-3">
           {address && (
-            <button onClick={() => setShowSwap(true)} className="px-4 py-2 rounded-xl glass text-white hover:bg-white/20">Swap</button>
+            <>
+              <button onClick={() => setShowSwap(true)} className="px-4 py-2 rounded-xl glass text-white hover:bg-white/20">Swap</button>
+              <button onClick={onConnect} className="px-6 py-3 rounded-xl glass text-white hover:bg-white/20">
+                {short}
+              </button>
+              <button onClick={onDisconnect} className="px-4 py-2 rounded-xl bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-all">
+                Disconnect
+              </button>
+            </>
           )}
-          <button onClick={onConnect} className={`px-6 py-3 rounded-xl font-semibold transition-all ${address ? 'glass text-white' : 'btn-primary'}`}>
-            {short || 'Connect Wallet'}
-          </button>
+          {!address && (
+            <button onClick={onConnect} className="px-6 py-3 rounded-xl font-semibold transition-all btn-primary">
+              Connect Wallet
+            </button>
+          )}
         </div>
       </div>
       {address && (

@@ -82,14 +82,25 @@ funded, active });
 
   async function handleConnect() {
     try {
-      const walletSigner = await connectWallet();
+      // Force wallet connection approval
+      const walletSigner = await connectWallet(true);
       const addr = await walletSigner.getAddress();
       setSigner(walletSigner);
       setAddress(addr);
     } catch (error) {
       console.error('Connection error:', error);
-      alert('Failed to connect wallet');
+      if ((error as any)?.code === 4001) {
+        alert('Wallet connection rejected by user');
+      } else {
+        alert('Failed to connect wallet');
+      }
     }
+  }
+
+  function handleDisconnect() {
+    setAddress(null);
+    setSigner(null);
+    setActiveTab('browse');
   }
 
   async function handleLend(borrowerId: number, amount: string) {
@@ -134,6 +145,7 @@ funded, active });
         <Header 
           address={address} 
           onConnect={handleConnect}
+          onDisconnect={handleDisconnect}
           stats={stats}
         />
 

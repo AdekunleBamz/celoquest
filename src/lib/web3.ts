@@ -30,13 +30,19 @@ export function getCUSDContract(signerOrProvider?: ethers.Signer | ethers.Provid
   return new ethers.Contract(CUSD_ADDRESS, ERC20_ABI, provider);
 }
 
-export async function connectWallet() {
+export async function connectWallet(forceRequest: boolean = true) {
   if (typeof window === 'undefined' || !window.ethereum) {
     throw new Error('Please install MetaMask');
   }
   
   const provider = new ethers.BrowserProvider(window.ethereum);
-  await provider.send('eth_requestAccounts', []);
+  
+  // Always request accounts to force user approval
+  if (forceRequest) {
+    await provider.send('eth_requestAccounts', []);
+  } else {
+    await provider.send('eth_requestAccounts', []);
+  }
   
   const network = await provider.getNetwork();
   if (Number(network.chainId) !== 42220) {
