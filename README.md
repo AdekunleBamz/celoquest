@@ -3,9 +3,9 @@
 > **Gamified Micro-Lending on Celo**  
 > Fund entrepreneurs worldwide with as little as one dollar
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://celoquest.vercel.app)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Built on Celo](https://img.shields.io/badge/built%20on-Celo-FBCC5C)](https://celo.org)
+**🚀 Live App:** [celoquest.vercel.app](https://celoquest.vercel.app)  
+**🎥 Demo Video:** [Watch on YouTube](https://youtu.be/Dy_U32ZDTzs)  
+**📊 Pitch Deck:** [View Presentation](https://docs.google.com/presentation/d/1MUyfl9sctvZSxQ1iQt2ynEoDe97TvoH_/edit?usp=sharing&ouid=110073243817824250862&rtpof=true&sd=true)
 
 ---
 
